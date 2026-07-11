@@ -1,74 +1,754 @@
-# 僕が教室長を辞めたくなった100の言葉
+/* =====================================
+   共通設定
+===================================== */
 
-GitHub Pages（Jekyll）で運用しているサイトです。
-「100の言葉」は日付を持たない独自コレクション `_kotoba` として管理しています
-（いつ書いたかではなく、何番目のエピソードかだけを管理する形です）。
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-## 新しい記事を1本追加する手順
+html {
+    scroll-behavior: smooth;
+}
 
-1. `_kotoba/` の中の好きなファイル（例：`001-ashita-yasumimasu.md`）をコピーする
-2. ファイル名を `連番3桁-半角ローマ字タイトル.md` の形にリネームする
-   - 例：4本目なら `004-example.md`
-3. ファイル冒頭のfront matterを書き換える
+body {
+    font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+    color: #333;
+    background: #f7f8fa;
+    line-height: 1.8;
+}
 
-```markdown
----
-number: 4                          # 通し番号（1〜100）
-permalink: /004/                   # 3桁ゼロ埋めでnumberと合わせる
-title: "タイトルをここに"
-summary: "一覧カードに出る1行紹介文をここに"
-tags: [生徒系]                      # 生徒系/講師系/保護者系/上司系/その他から1つ以上
-# image: /assets/images/kotoba/004.jpg   # 画像を用意したらコメントを外す
----
+/* =====================================
+   ヘッダー
+===================================== */
 
-本文をここに書く。
-```
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 70px;
 
-4. 本文を書く（Markdown形式）
-   - 強調したい一文は `**こう囲む**` と太字になります
-   - 段落を分けたいところは空行を入れる
-   - セリフを連続で並べたいときは改行だけでOK（1つの段落として詰まって表示されます）
-5. 画像を使う場合は `assets/images/kotoba/` に `004.jpg` のような形で置き、front matterの `image` の行のコメントを外す（漫画の1コマ目ができたら、ここを差し替えるだけでOK）
-6. 保存してGitHubにpushすれば、数十秒〜数分でサイトに自動反映されます
+    background: rgba(20, 32, 48, 0.95);
 
-## AIに依頼するときのテンプレート例
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-> 「第4話として、こういう出来事のエピソードを書いて。number: 4, permalink: /004/, title, summary, tagsの形式で、上のREADMEのfront matter仕様に沿ったMarkdownファイルの中身だけ出力して。改行や太字も読みやすいように整えて」
+    padding: 0 30px;
 
-とお願いすれば、そのままコピーして `_kotoba/` に保存するだけで反映できます。
+    z-index: 1000;
+}
 
-## タグの種類
+.logo {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
 
-- 生徒系
-- 講師系
-- 保護者系
-- 上司系
-- その他
+.logo a {
+    color: inherit;
+    text-decoration: none;
+}
 
-1記事に複数タグを付けることも可能です（例：`tags: [生徒系, 保護者系]`）。
+.hamburger {
+    font-size: 30px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
 
-## 表示の仕組み
+/* =====================================
+   メニュー
+===================================== */
 
-- **トップページ**：全記事の中からランダムに5本を表示（ページを開く・リロードするたびに変わります）
-- **`/words/` 一覧ページ**：全記事を表示。タグボタンで絞り込み可能
-- **前の話／次の話**：`number`の順番で自動的につながります（日付は一切使いません）
+nav {
+    position: fixed;
 
-## フォルダ構成
+    top: 70px;
+    right: -300px;
 
-```
-_config.yml          サイト全体の設定
-_layouts/
-  default.html        全ページ共通の外枠（ヘッダー・ナビ・フッター）
-  post.html            記事詳細ページの型
-_kotoba/               記事本体（1記事1ファイル、日付なし）
-assets/
-  css/style.css        デザイン
-  js/script.js         ハンバーガーメニュー・ランダム表示・タグ絞り込み
-  images/              画像（hero.jpg、記事ごとの画像はimages/kotoba/内）
-index.html             トップページ（ランダム5本＋一覧ページへのリンク）
-words/index.html       100の言葉 一覧ページ（タグ絞り込み）
-```
+    width: 260px;
+    height: calc(100vh - 70px);
 
-## 反映されないときの確認先
+    background: white;
 
-pushしてもサイトが更新されない場合は、GitHubリポジトリの **Actions** タブでビルドが失敗していないか確認してください。front matterの `---` の書き忘れや、YAMLのインデント崩れが原因になることが多いです。
+    box-shadow: -5px 0 15px rgba(0,0,0,.15);
+
+    transition: .3s;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 999;
+}
+
+nav.open {
+    right: 0;
+}
+
+nav a {
+    padding: 20px;
+
+    color: #333;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid #eee;
+
+    transition: .2s;
+}
+
+nav a:hover {
+    background: #f2f2f2;
+}
+
+/* =====================================
+   ヒーロー
+===================================== */
+
+.hero {
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 120px 20px 80px;
+
+    background:
+        linear-gradient(rgba(20,32,48,.65), rgba(20,32,48,.65)),
+        url("../images/hero.jpg");
+
+    background-size: cover;
+    background-position: center;
+
+    color: white;
+}
+
+.hero-overlay {
+    max-width: 900px;
+}
+
+.hero h1 {
+
+    font-size: 52px;
+
+    margin-bottom: 30px;
+
+    line-height: 1.4;
+}
+
+.catch {
+
+    font-size: 26px;
+
+    margin-bottom: 40px;
+
+    font-weight: bold;
+}
+
+.description {
+
+    font-size: 20px;
+
+    margin-bottom: 50px;
+}
+
+/* =====================================
+   ボタン
+===================================== */
+
+.button {
+
+    display: inline-block;
+
+    background: white;
+
+    color: #1d2b3a;
+
+    padding: 15px 40px;
+
+    border-radius: 40px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: .3s;
+}
+
+.button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 10px 20px rgba(0,0,0,.2);
+}
+
+/* =====================================
+   コンテンツ
+===================================== */
+
+.content {
+
+    max-width: 1000px;
+
+    margin: auto;
+
+    padding: 100px 20px;
+}
+
+.content h2 {
+
+    font-size: 36px;
+
+    margin-bottom: 40px;
+
+    color: #1d2b3a;
+}
+
+.content p {
+
+    margin-bottom: 20px;
+}
+
+/* =====================================
+   カード（100の言葉 一覧）
+===================================== */
+
+.post-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+
+    gap: 25px;
+
+    margin-top: 25px;
+}
+
+.card {
+
+    display: block;
+
+    background: white;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+
+    transition: .3s;
+
+    text-decoration: none;
+
+    color: inherit;
+}
+
+.card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 15px 30px rgba(0,0,0,.15);
+}
+
+.card-image {
+
+    width: 100%;
+
+    height: 160px;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.card-body {
+
+    padding: 25px 30px 30px;
+}
+
+.card-number {
+
+    font-size: 13px;
+
+    color: #7a8794;
+
+    letter-spacing: .05em;
+
+    margin-bottom: 8px;
+}
+
+.card h3 {
+
+    margin-bottom: 15px;
+
+    color: #1d2b3a;
+}
+
+.card-body p:last-child {
+
+    margin-bottom: 0;
+}
+
+/* =====================================
+   MVV
+===================================== */
+
+.mvv {
+
+    margin-top: 50px;
+
+    padding: 40px;
+
+    background: #eef2f7;
+
+    border-radius: 15px;
+}
+
+.mvv h3 {
+
+    margin-top: 25px;
+
+    color: #1d2b3a;
+}
+
+.mvv h3:first-child {
+    margin-top: 0;
+}
+
+/* =====================================
+   リスト
+===================================== */
+
+ul {
+
+    margin: 25px 0 30px 25px;
+}
+
+li {
+
+    margin-bottom: 12px;
+}
+
+/* =====================================
+   SNS
+===================================== */
+
+.sns {
+
+    display: flex;
+
+    gap: 20px;
+
+    margin-top: 30px;
+}
+
+.sns a {
+
+    text-decoration: none;
+
+    background: #1d2b3a;
+
+    color: white;
+
+    padding: 12px 25px;
+
+    border-radius: 8px;
+
+    transition: .3s;
+}
+
+.sns a:hover {
+
+    background: #30455e;
+}
+
+/* =====================================
+   トップページ：100の言葉（ランダム表示）
+===================================== */
+
+.words-empty {
+
+    display: none;
+}
+
+.words-archive-link {
+
+    text-align: center;
+
+    margin-top: 40px;
+}
+
+.button-secondary {
+
+    display: inline-block;
+
+    background: transparent;
+
+    color: #1d2b3a;
+
+    border: 2px solid #1d2b3a;
+
+    padding: 13px 38px;
+
+    border-radius: 40px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: .3s;
+}
+
+.button-secondary:hover {
+
+    background: #1d2b3a;
+
+    color: white;
+}
+
+/* =====================================
+   100の言葉 一覧ページ（タグ絞り込み）
+===================================== */
+
+.archive-lead {
+
+    color: #7a8794;
+
+    margin-bottom: 25px !important;
+}
+
+.tag-filter {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-bottom: 40px;
+}
+
+.tag-filter-btn {
+
+    background: white;
+
+    border: 2px solid #dde3ea;
+
+    color: #7a8794;
+
+    padding: 10px 22px;
+
+    border-radius: 30px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.tag-filter-btn:hover {
+
+    border-color: #1d2b3a;
+
+    color: #1d2b3a;
+}
+
+.tag-filter-btn.active {
+
+    background: #1d2b3a;
+
+    border-color: #1d2b3a;
+
+    color: white;
+}
+
+/* =====================================
+   記事詳細ページ（100の言葉 個別ページ）
+===================================== */
+
+.post {
+
+    padding-top: 140px;
+}
+
+.back-link {
+
+    display: inline-block;
+
+    margin-bottom: 30px;
+
+    color: #1d2b3a;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    opacity: .7;
+
+    transition: .2s;
+}
+
+.back-link:hover {
+
+    opacity: 1;
+}
+
+.post-header {
+
+    text-align: center;
+
+    margin-bottom: 50px;
+}
+
+.post-image {
+
+    width: 100%;
+
+    max-height: 360px;
+
+    object-fit: cover;
+
+    border-radius: 15px;
+
+    margin-bottom: 30px;
+}
+
+.post-number {
+
+    font-size: 14px;
+
+    color: #7a8794;
+
+    letter-spacing: .1em;
+
+    margin-bottom: 12px;
+}
+
+.post-header h1 {
+
+    font-size: 34px;
+
+    color: #1d2b3a;
+
+    line-height: 1.5;
+
+    margin-bottom: 15px;
+}
+
+.post-tags {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+.tag-chip {
+
+    display: inline-block;
+
+    background: #eef2f7;
+
+    color: #1d2b3a;
+
+    font-size: 13px;
+
+    padding: 5px 14px;
+
+    border-radius: 20px;
+}
+
+.post-body {
+
+    font-size: 17px;
+
+    margin-bottom: 60px;
+}
+
+.post-body p {
+
+    margin-bottom: 25px;
+}
+
+.post-body h2,
+.post-body h3 {
+
+    color: #1d2b3a;
+
+    margin: 40px 0 20px;
+}
+
+.post-nav {
+
+    display: grid;
+
+    grid-template-columns: 1fr auto 1fr;
+
+    gap: 20px;
+
+    margin-bottom: 50px;
+}
+
+.post-nav-link {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.06);
+
+    text-decoration: none;
+
+    color: #7a8794;
+
+    font-size: 14px;
+
+    transition: .3s;
+}
+
+.post-nav-link span {
+
+    display: block;
+
+    margin-top: 8px;
+
+    color: #1d2b3a;
+
+    font-size: 15px;
+
+    font-weight: bold;
+}
+
+.post-nav-link:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 15px 30px rgba(0,0,0,.12);
+}
+
+.post-nav-next {
+
+    text-align: right;
+}
+
+.post-nav-list {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px 30px;
+
+    font-weight: bold;
+
+    color: #1d2b3a;
+
+    white-space: nowrap;
+}
+
+.post-nav-link.disabled {
+
+    opacity: .35;
+
+    pointer-events: none;
+
+    box-shadow: none;
+}
+
+/* =====================================
+   フッター
+===================================== */
+
+footer {
+
+    text-align: center;
+
+    padding: 40px;
+
+    background: #1d2b3a;
+
+    color: white;
+}
+
+/* =====================================
+   スマホ
+===================================== */
+
+@media screen and (max-width:768px){
+
+.logo{
+
+    font-size:16px;
+}
+
+.hero h1{
+
+    font-size:34px;
+}
+
+.catch{
+
+    font-size:20px;
+}
+
+.description{
+
+    font-size:17px;
+}
+
+.content{
+
+    padding:70px 20px;
+}
+
+.content h2{
+
+    font-size:28px;
+}
+
+.sns{
+
+    flex-direction:column;
+}
+
+.sns a{
+
+    text-align:center;
+}
+
+.post-header h1 {
+
+    font-size: 26px;
+}
+
+.post-nav {
+
+    grid-template-columns: 1fr;
+}
+
+.post-nav-prev,
+.post-nav-next {
+
+    text-align: center;
+}
+
+}

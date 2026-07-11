@@ -1,0 +1,86 @@
+---
+layout: default
+---
+
+{% assign post_image = page.image | default: "/assets/images/kotoba/default.jpg" %}
+
+{% assign sorted = site.kotoba | sort: "number" %}
+{% assign current_index = -1 %}
+{% for item in sorted %}
+  {% if item.url == page.url %}
+    {% assign current_index = forloop.index0 %}
+  {% endif %}
+{% endfor %}
+
+{% assign prev_item = nil %}
+{% assign next_item = nil %}
+{% if current_index > 0 %}
+  {% assign prev_index = current_index | minus: 1 %}
+  {% assign prev_item = sorted[prev_index] %}
+{% endif %}
+{% assign next_index = current_index | plus: 1 %}
+{% if next_index < sorted.size %}
+  {% assign next_item = sorted[next_index] %}
+{% endif %}
+
+<article class="content post">
+
+    <a href="{{ '/' | relative_url }}#words" class="back-link">← 100の言葉一覧に戻る</a>
+
+    <div class="post-header">
+
+        <img src="{{ post_image | relative_url }}" alt="{{ page.title }}" class="post-image">
+
+        <p class="post-number">第{{ page.number }}話</p>
+
+        <h1>{{ page.title }}</h1>
+
+        {% if page.tags %}
+        <div class="post-tags">
+            {% for tag in page.tags %}
+            <span class="tag-chip">{{ tag }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="post-body">
+
+        {{ content }}
+
+    </div>
+
+    <nav class="post-nav">
+
+        {% if prev_item %}
+        <a href="{{ prev_item.url | relative_url }}" class="post-nav-link post-nav-prev">
+            ← 前の記事へ<br>
+            <span>{{ prev_item.title }}</span>
+        </a>
+        {% else %}
+        <span class="post-nav-link post-nav-prev disabled">
+            ← 前の記事へ<br>
+            <span>―</span>
+        </span>
+        {% endif %}
+
+        <a href="{{ '/words/' | relative_url }}" class="post-nav-link post-nav-list">
+            一覧へ
+        </a>
+
+        {% if next_item %}
+        <a href="{{ next_item.url | relative_url }}" class="post-nav-link post-nav-next">
+            次の記事へ →<br>
+            <span>{{ next_item.title }}</span>
+        </a>
+        {% else %}
+        <span class="post-nav-link post-nav-next disabled">
+            次の記事へ →<br>
+            <span>―</span>
+        </span>
+        {% endif %}
+
+    </nav>
+
+</article>
