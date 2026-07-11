@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+
+    {% if page.summary %}
+    <meta name="description" content="{{ page.summary | strip_html | strip_newlines }}">
+    {% else %}
+    <meta name="description" content="{{ site.description }}">
+    {% endif %}
+
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+</head>
+
+<body>
+
+    <!-- ハンバーガーメニュー -->
+
+    <header>
+
+        <div class="logo">
+
+            <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
+
+        </div>
+
+        <button class="hamburger" id="hamburger">
+
+            ☰
+
+        </button>
+
+    </header>
+
+    <!-- メニュー -->
+
+    <nav id="menu">
+
+        <a href="{{ '/' | relative_url }}#top">ホーム</a>
+
+        <a href="{{ '/' | relative_url }}#words">100の言葉</a>
+
+        <a href="{{ '/' | relative_url }}#toolbox">道具箱</a>
+
+        <a href="{{ '/' | relative_url }}#about">このサイトについて</a>
+
+        <a href="{{ '/' | relative_url }}#author">作者について</a>
+
+        <a href="{{ '/' | relative_url }}#contact">お問い合わせ</a>
+
+    </nav>
+
+    {{ content }}
+
+    <!-- フッター -->
+
+    <footer>
+
+        <p>
+
+            © 2026 Tanamaru
+
+        </p>
+
+    </footer>
+
+    <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
+
+</body>
+
+</html>
