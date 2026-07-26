@@ -4,7 +4,7 @@ permalink: /002/
 title: "提出し忘れていました。次から気を付けます。"
 summary: "「気を付けます」で終わる反省は、また繰り返される。"
 tags: [講師系,育成]
-image: /assets/images/kotoba/002.jpg
+# image: /assets/images/kotoba/002.jpg
 ---
 
 学生講師からよく届くメッセージがあります。
