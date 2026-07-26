@@ -1,7 +1,7 @@
 ---
 number: 3
 permalink: /003/
-title: "入会率低いから研修をやろう"
+title: "上司「入会率低いから研修をやろう」"
 summary: "本当に原因は面談スキルだったのか。"
 tags: [上司系]
 # image: /assets/images/kotoba/003.jpg
