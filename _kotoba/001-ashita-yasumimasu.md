@@ -1,7 +1,7 @@
 ---
 number: 1
 permalink: /001/
-title: "明日休みます"
+title: "講師「明日休みます」"
 summary: "教室長になって一番怖かった、たった一文の通知。"
 tags: [講師系]
 # image: /assets/images/kotoba/001.jpg   # 画像ができたらコメントを外して指定
