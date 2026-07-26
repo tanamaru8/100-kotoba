@@ -2,7 +2,7 @@
 number: 3
 permalink: /003/
 title: "上司「キミ入会率低いから、毎週木曜日早出で面談研修ね」"
-summary: "本当に原因は面談スキルだったのか。"
+summary: "研修の目的は、反省させることではない。自信を持って現場に戻れる状態をつくること"
 tags: [上司系]
 # image: /assets/images/kotoba/003.jpg
 ---
